@@ -26,27 +26,20 @@ public class ChannelEmitterWithMultipleDefinitions {
 
     @Inject
     public void setEmitter(
-            @Channel("sink") @Broadcast @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 4) Emitter<String> sink2) {
+            @Channel("sink") @Broadcast @OnOverflow(value = OnOverflow.Strategy.BUFFER) Emitter<String> sink2) {
         this.emitterForSink2 = sink2;
     }
 
     private final List<String> list = new CopyOnWriteArrayList<>();
-    private final List<String> sink1 = new CopyOnWriteArrayList<>();
-    private final List<String> sink2 = new CopyOnWriteArrayList<>();
-
-    private final List<String> list2 = new CopyOnWriteArrayList<>();
-    private final List<String> sink12 = new CopyOnWriteArrayList<>();
-    private final List<String> sink22 = new CopyOnWriteArrayList<>();
 
     public void run() {
         emitter.send("a");
         emitter.send("b");
         emitter.send("c").toCompletableFuture().join();
-        emitter.complete();
         emitterForSink2.send("a2").toCompletableFuture().join();
         emitterForSink2.send("b2");
         emitterForSink2.send("c2");
-        emitterForSink2.complete();
+        emitter.complete();
     }
 
     @Incoming("sink")
@@ -54,33 +47,8 @@ public class ChannelEmitterWithMultipleDefinitions {
         list.add(s);
     }
 
-    @Incoming("sink")
-    public void consume2(String s) {
-        list2.add(s);
-    }
-
     public List<String> list() {
         return list;
-    }
-
-    public List<String> list2() {
-        return list2;
-    }
-
-    public List<String> sink11() {
-        return sink1;
-    }
-
-    public List<String> sink12() {
-        return sink12;
-    }
-
-    public List<String> sink21() {
-        return sink2;
-    }
-
-    public List<String> sink22() {
-        return sink22;
     }
 
 }

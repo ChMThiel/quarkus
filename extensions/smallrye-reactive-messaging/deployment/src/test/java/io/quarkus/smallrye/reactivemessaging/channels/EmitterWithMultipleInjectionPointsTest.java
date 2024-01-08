@@ -1,10 +1,8 @@
 package io.quarkus.smallrye.reactivemessaging.channels;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import jakarta.enterprise.inject.spi.DeploymentException;
 import jakarta.inject.Inject;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -15,15 +13,15 @@ public class EmitterWithMultipleInjectionPointsTest {
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withApplicationRoot((jar) -> jar
-                    .addClasses(ChannelEmitterWithMultipleDefinitions.class))
-            .setExpectedException(DeploymentException.class);
+                    .addClasses(ChannelEmitterWithMultipleDefinitions.class));
 
     @Inject
-    ChannelEmitterWithOverflow bean;
+    ChannelEmitterWithMultipleDefinitions bean;
 
     @Test
     public void testEmitter() {
-        fail();
+        bean.run();
+        Assertions.assertThat(bean.list()).contains("a", "b", "c", "a2", "b2", "c2");
     }
 
 }

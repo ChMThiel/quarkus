@@ -31,10 +31,10 @@
         <opentracing-jdbc.version>0.2.4</opentracing-jdbc.version>
         <opentracing-kafka.version>0.1.15</opentracing-kafka.version>
         <opentracing-mongo.version>0.1.5</opentracing-mongo.version>
-        <opentelemetry.version>1.31.0</opentelemetry.version>
-        <opentelemetry-alpha.version>1.31.0-alpha</opentelemetry-alpha.version>
-        <opentelemetry-semconv.version>1.23.1-alpha</opentelemetry-semconv.version>
-        <quarkus-http.version>5.0.3.Final</quarkus-http.version>
+        <opentelemetry.version>1.32.0</opentelemetry.version>
+        <opentelemetry-alpha.version>1.32.0-alpha</opentelemetry-alpha.version>
+        <opentelemetry-semconv.version>1.21.0-alpha</opentelemetry-semconv.version> <!-- keep in sync with opentelemetry-java-instrumentation in the alpha bom-->
+        <quarkus-http.version>5.1.0.Final</quarkus-http.version>
         <micrometer.version>1.11.5</micrometer.version><!-- keep in sync with hdrhistogram -->
         <hdrhistogram.version>2.1.12</hdrhistogram.version><!-- keep in sync with micrometer -->
         <google-auth.version>0.22.0</google-auth.version>
@@ -61,9 +61,9 @@
         <smallrye-context-propagation.version>2.1.0</smallrye-context-propagation.version>
         <smallrye-reactive-streams-operators.version>1.0.13</smallrye-reactive-streams-operators.version>
         <smallrye-reactive-types-converter.version>3.0.1</smallrye-reactive-types-converter.version>
-        <smallrye-mutiny-vertx-binding.version>3.7.2</smallrye-mutiny-vertx-binding.version>
-        <smallrye-reactive-messaging.version>4.13.0</smallrye-reactive-messaging.version>
-        <smallrye-stork.version>2.4.0</smallrye-stork.version>
+        <smallrye-mutiny-vertx-binding.version>3.8.0</smallrye-mutiny-vertx-binding.version>
+        <smallrye-reactive-messaging.version>4.14.0</smallrye-reactive-messaging.version>
+        <smallrye-stork.version>2.5.0</smallrye-stork.version>
         <jakarta.activation.version>2.1.2</jakarta.activation.version>
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
         <jakarta.authentication-api>3.0.0</jakarta.authentication-api>
@@ -121,7 +121,7 @@
         <wildfly-client-config.version>1.0.1.Final</wildfly-client-config.version>
         <wildfly-elytron.version>2.2.2.Final</wildfly-elytron.version>
         <jboss-threads.version>3.5.1.Final</jboss-threads.version>
-        <vertx.version>4.4.6</vertx.version>
+        <vertx.version>4.5.1</vertx.version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpcore.version>4.4.16</httpcore.version>
         <httpasync.version>4.1.5</httpasync.version>
@@ -144,7 +144,7 @@
         <infinispan.version>14.0.21.Final</infinispan.version>
         <infinispan.protostream.version>4.6.5.Final</infinispan.protostream.version>
         <caffeine.version>3.1.5</caffeine.version>
-        <netty.version>4.1.100.Final</netty.version>
+        <netty.version>4.1.103.Final</netty.version>
         <brotli4j.version>1.12.0</brotli4j.version>
         <reactive-streams.version>1.0.4</reactive-streams.version>
         <jboss-logging.version>3.5.3.Final</jboss-logging.version>
@@ -179,8 +179,6 @@
         <mongo-crypt.version>1.8.0</mongo-crypt.version>
         <proton-j.version>0.34.1</proton-j.version>
         <javaparser.version>3.25.6</javaparser.version>
-        <okhttp.version>3.14.9</okhttp.version><!-- keep in sync with okio -->
-        <okio.version>1.17.6</okio.version><!-- keep in sync with okhttp -->
         <hibernate-quarkus-local-cache.version>0.3.0</hibernate-quarkus-local-cache.version>
         <flapdoodle.mongo.version>4.12.0</flapdoodle.mongo.version>
         <quarkus-spring-api.version>5.2.SP7</quarkus-spring-api.version>
@@ -1402,6 +1400,16 @@
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-confluent-registry-avro</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-confluent-registry-json-schema</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-confluent-registry-json-schema-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -3399,7 +3407,6 @@
                 <artifactId>apicurio-common-rest-client-vertx</artifactId>
                 <version>${apicurio-common-rest-client.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-mutiny</artifactId>
@@ -4198,21 +4205,6 @@
                         <artifactId>plexus-classworlds</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${okhttp.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>logging-interceptor</artifactId>
-                <version>${okhttp.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okio</groupId>
-                <artifactId>okio</artifactId>
-                <version>${okio.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mongodb</groupId>
@@ -5508,11 +5500,6 @@
                 <version>${infinispan.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-test-infinispan-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.reactivestreams</groupId>
                 <artifactId>reactive-streams</artifactId>
                 <version>${reactive-streams.version}</version>
@@ -6277,6 +6264,11 @@
                             <excludeScopes>test</excludeScopes>
                             <excludeArtifactKeys>
                                 <key>junit:junit</key> <!-- comes from the jackson-bom -->
+
+                                <!-- we don't want our BOM to enforce Okhttp dependencies -->
+                                <key>com.squareup.okhttp3:*</key>
+                                <key>com.squareup.okhttp:*</key>
+                                <key>com.squareup.okio:*</key>
 
                                 <!-- jboss-parent:40 still manages jdk-misc, but does not define version.jdk-misc anymore. -->
                                 <!-- We can just remove it because is not needed anyway. -->

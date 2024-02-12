@@ -175,7 +175,11 @@ public class PanacheJpaUtil {
             Sort.Column column = sort.getColumns().get(i);
             if (i > 0)
                 sb.append(" , ");
-            sb.append('`').append(unquoteColumnName(column)).append('`');
+            if (sort.isEscapingEnabled()) {
+                sb.append(escapeColumnName(column.getName()));
+            } else {
+                sb.append(column.getName());
+            }
             if (column.getDirection() != Sort.Direction.Ascending) {
                 sb.append(" DESC");
             }
@@ -192,8 +196,18 @@ public class PanacheJpaUtil {
         return sb.toString();
     }
 
-    private static String unquoteColumnName(Sort.Column column) {
-        String columnName = column.getName();
+    private static StringBuilder escapeColumnName(String columnName) {
+        StringBuilder sb = new StringBuilder();
+        String[] path = columnName.split("\\.");
+        for (int j = 0; j < path.length; j++) {
+            if (j > 0)
+                sb.append('.');
+            sb.append('`').append(unquoteColumnName(path[j])).append('`');
+        }
+        return sb;
+    }
+
+    private static String unquoteColumnName(String columnName) {
         String unquotedColumnName;
         //Note HQL uses backticks to escape/quote special words that are used as identifiers
         if (columnName.charAt(0) == '`' && columnName.charAt(columnName.length() - 1) == '`') {
